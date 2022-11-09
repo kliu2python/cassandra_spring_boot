@@ -1,5 +1,7 @@
 package com.cassandra.cassandra_datastax.controller;
 
+import com.cassandra.cassandra_datastax.DAO.ShoppingCartDAO;
+import com.cassandra.cassandra_datastax.model.ShoppingCart;
 import com.cassandra.cassandra_datastax.service.ProductService;
 import com.datastax.oss.driver.api.core.cql.ExecutionInfo;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
@@ -15,14 +17,23 @@ public class CassandraController {
     private ProductService service;
 
     @RequestMapping(value = "/item/counts", method = RequestMethod.GET)
-    public int getItemCounts(@RequestParam int uid) {
-        int res = 0;
+    public ShoppingCart getItemCounts(@RequestParam String uid) {
+        ShoppingCart res = new ShoppingCart();
         try {
-            res = service.getItemsCount(uid);
+            res = service.getShoppingCartByUID(uid);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return res;
+    }
+
+    @RequestMapping(value = "/item", method = RequestMethod.POST)
+    public void createShoppingCart() {
+        try {
+            service.saveShoppingCart();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
